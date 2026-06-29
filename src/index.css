@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  color: #0f172a;
+  background: #0b1224;
+  background-image:
+    radial-gradient(45rem 45rem at 8% -5%, rgba(79, 70, 229, 0.32), transparent 58%),
+    radial-gradient(42rem 42rem at 105% 5%, rgba(14, 165, 233, 0.24), transparent 55%),
+    radial-gradient(40rem 40rem at 50% 115%, rgba(20, 184, 166, 0.18), transparent 55%),
+    linear-gradient(180deg, #0b1224 0%, #0e1730 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
