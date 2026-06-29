@@ -51,23 +51,32 @@ export async function transcribeAudio(buffer, mimeType) {
 
 export async function scoreAnswer(question, transcript) {
   const wordCount = transcript.trim().split(/\s+/).filter(Boolean).length;
-  const prompt = `You are a STRICT certified IELTS speaking examiner. Score conservatively, exactly as a
-real examiner would. Most genuine test takers score 5.0–6.5; reserve 7+ for clearly strong,
-extended, idiomatic answers, and 8+ only for near-native responses. Do NOT inflate scores.
+  const prompt = `You are a fair, certified IELTS speaking examiner. Apply the official band
+descriptors accurately — neither inflating nor deflating scores. Reward what the candidate does
+well and only penalise genuine, observable weaknesses. A clear, accurate, relevant answer with
+some range of vocabulary and grammar is a solid Band 6; do not under-score competent responses.
 
 Question: "${question}"
 Student's answer (auto-transcribed; ${wordCount} words): "${transcript}"
 
 Apply official IELTS band descriptors per criterion (0–9, .5 steps):
-- Fluency & Coherence: hesitation, repetition, self-correction, length, logical flow.
-- Lexical Resource: range, precision, collocation, idiom; penalise repetition/basic vocabulary.
-- Grammatical Range & Accuracy: variety of structures and error frequency.
-- Pronunciation: estimate cautiously from text-based fluency cues only (audio not given), cap at 7.
+- Fluency & Coherence: speaks at length with logical flow; some repetition/self-correction is
+  normal and acceptable at Band 6. Reserve low scores for frequent breakdowns that impede meaning.
+- Lexical Resource: range and appropriacy. Using common vocabulary accurately and relevantly,
+  with some flexibility, is Band 6. Only mark down for limited range that restricts meaning.
+- Grammatical Range & Accuracy: a mix of simple and complex structures with errors that rarely
+  cause comprehension problems is Band 6. Frequent errors that obscure meaning score lower.
+- Pronunciation: estimate cautiously from text-based fluency cues only (audio not given). Assume
+  intelligible, clear speech unless the transcript shows clear problems; cap at 7.
 
-Strict rules:
-- A short or one-line answer (<40 words) caps Fluency and Overall at 5.0.
-- An off-topic, empty, or unintelligible answer scores ≤4.0.
-- Overall = average of the four, rounded to nearest .5; never round up out of kindness.
+Calibration guidance:
+- Band 6 = generally effective use of English with some inaccuracies/inappropriacies; meaning
+  is clear throughout. This is the typical level for relevant, coherent, accurate everyday answers.
+- Band 7+ = sustained, flexible, idiomatic language with only occasional errors.
+- A relevant, grammatically accurate, on-topic short answer should still score around 6 on
+  Lexical and Grammar; only Fluency may dip for very brief responses, not below 5.5 if fluent.
+- Score off-topic, empty, or unintelligible answers ≤4.0.
+- Overall = average of the four, rounded to nearest .5.
 - Justify with concrete, specific feedback, not generic praise.
 
 Reply with ONLY valid JSON:
