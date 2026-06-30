@@ -3,6 +3,7 @@ import { Practice } from "./views/Practice";
 import { MockTest } from "./views/MockTest";
 import { History } from "./views/History";
 import { Login } from "./views/Login";
+import { VoiceSelector } from "./components/VoiceSelector";
 import { useAuth } from "./auth/AuthContext";
 
 type Tab = "practice" | "mock" | "history";
@@ -30,8 +31,9 @@ export default function App() {
           Speak. Get instant AI band scores. Track your progress.
         </p>
         {student && (
-          <div className="mt-3 flex items-center justify-center gap-3 text-xs text-indigo-100">
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-xs text-indigo-100">
             <span>Hi, {student.name}</span>
+            <VoiceSelector />
             <button onClick={signOut} className="rounded-full bg-white/10 px-3 py-1 hover:bg-white/20">
               Sign out
             </button>
