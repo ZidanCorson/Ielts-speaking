@@ -5,11 +5,26 @@
 :root {
   color-scheme: light;
 }
+html.dark {
+  color-scheme: dark;
+}
 
+/* Apple-inspired: clean, minimal, system (SF Pro) typography. Light + dark themes. */
 body {
   margin: 0;
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
-  color: #0f172a;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+  color: #1d1d1f;
+  background: #f5f5f7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  letter-spacing: -0.01em;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark body {
+  color: #f5f5f7;
   background: #0b1224;
   background-image:
     radial-gradient(45rem 45rem at 8% -5%, rgba(79, 70, 229, 0.32), transparent 58%),
@@ -17,13 +32,130 @@ body {
     radial-gradient(40rem 40rem at 50% 115%, rgba(20, 184, 166, 0.18), transparent 55%),
     linear-gradient(180deg, #0b1224 0%, #0e1730 100%);
   background-attachment: fixed;
-  min-height: 100vh;
 }
 
+/* ---- Reusable surfaces ---- */
+/* Solid cards with a soft, diffuse shadow — Apple's product-card look. */
 .glass {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+html.dark .glass {
+  background: rgba(30, 42, 74, 0.92);
+  backdrop-filter: saturate(160%) blur(20px);
+  -webkit-backdrop-filter: saturate(160%) blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 10px 30px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* Frosted translucent pill/bar — Apple's nav & chip treatment. */
+.glass-dark {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+html.dark .glass-dark {
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* Gentle lift-on-hover for clickable cards. */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06), 0 22px 48px rgba(0, 0, 0, 0.10);
+}
+html.dark .card-hover:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5), 0 22px 48px rgba(0, 0, 0, 0.65);
+}
+
+/* ---- Text & buttons ---- */
+/* Apple headlines are solid near-black (white in dark) with tight tracking. */
+.gradient-text {
+  color: #1d1d1f;
+  letter-spacing: -0.022em;
+}
+html.dark .gradient-text {
+  color: #f5f5f7;
+}
+
+/* Apple's signature blue pill CTA (works in both themes). */
+.btn-primary {
+  background-color: #0071e3;
+  color: #fff;
+  transition: background-color 0.2s ease, transform 0.12s ease;
+}
+.btn-primary:hover {
+  background-color: #0077ed;
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Subtle neutral secondary button. */
+.btn-chip {
+  background: rgba(0, 0, 0, 0.05);
+  color: #1d1d1f;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.12s ease;
+}
+.btn-chip:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+.btn-chip:active {
+  transform: scale(0.97);
+}
+html.dark .btn-chip {
+  background: rgba(255, 255, 255, 0.10);
+  color: #f5f5f7;
+}
+html.dark .btn-chip:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ---- Focus & selection ---- */
+:where(input, button, select, a):focus-visible {
+  outline: 3px solid rgba(0, 125, 250, 0.6);
+  outline-offset: 2px;
+}
+::selection {
+  background: rgba(0, 113, 227, 0.22);
+}
+
+/* ---- Scrollbars ---- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+html.dark * {
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+html.dark *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.32);
+  background-clip: content-box;
+}
+html.dark *::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+  background-clip: content-box;
 }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }

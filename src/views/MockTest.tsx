@@ -56,19 +56,29 @@ export function MockTest() {
       overall: avg(scores.map((s) => s.overall)),
     };
     return (
-      <div className="animate-fadeUp glass rounded-2xl border border-white/40 p-8 text-center shadow-xl shadow-indigo-900/20">
-        <h2 className="font-display text-2xl font-bold text-slate-800">Mock test complete 🎉</h2>
-        <div className="mt-5 inline-flex flex-col items-center rounded-3xl bg-gradient-to-br from-indigo-600 to-emerald-500 px-12 py-6 text-white shadow-lg">
-          <div className="text-5xl font-extrabold">{final.overall}</div>
-          <div className="mt-1 text-sm opacity-90">Estimated band</div>
+      <div className="animate-scaleIn glass rounded-3xl p-8 text-center">
+        <h2 className="font-display text-3xl font-semibold tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">Mock test complete 🎉</h2>
+        <p className="mt-1 text-base text-[#6e6e73] dark:text-[#a1a1a6]">Here's your estimated overall band.</p>
+        <div className="relative mx-auto mt-5 inline-flex flex-col items-center">
+          <div className="relative inline-flex flex-col items-center rounded-3xl bg-[#0071e3] px-12 py-6 text-white">
+            <div className="text-5xl font-semibold">{final.overall}</div>
+            <div className="mt-1 text-sm opacity-90">Estimated band</div>
+          </div>
         </div>
-        <div className="mt-5 flex flex-wrap justify-center gap-2 text-xs">
-          <span className="rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-600">Fluency {final.fluency}</span>
-          <span className="rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-600">Lexical {final.lexical}</span>
-          <span className="rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-600">Grammar {final.grammar}</span>
-          <span className="rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-600">Pronunciation {final.pronunciation}</span>
+        <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {([
+            ["Fluency", final.fluency],
+            ["Lexical", final.lexical],
+            ["Grammar", final.grammar],
+            ["Pronun.", final.pronunciation],
+          ] as const).map(([label, value]) => (
+            <div key={label} className="rounded-xl bg-[#f5f5f7] px-2 py-3 dark:bg-white/5">
+              <div className="text-lg font-semibold text-[#1d1d1f] dark:text-[#f5f5f7]">{value}</div>
+              <div className="text-[11px] font-medium text-[#86868b]">{label}</div>
+            </div>
+          ))}
         </div>
-        <button onClick={() => { setStep(0); setScores([]); setDone(false); }} className="mt-6 rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-500 px-6 py-2.5 font-semibold text-white shadow-lg transition hover:brightness-110">
+        <button onClick={() => { setStep(0); setScores([]); setDone(false); }} className="btn-primary mt-6 rounded-full px-6 py-2.5 font-medium">
           Restart test
         </button>
       </div>
@@ -78,24 +88,32 @@ export function MockTest() {
   const progress = (step / testQuestions.length) * 100;
   return (
     <div className="space-y-4">
-      <div className="h-2 w-full overflow-hidden rounded-full bg-white/15">
-        <div className="h-full rounded-full bg-gradient-to-r from-indigo-400 to-emerald-400 transition-all" style={{ width: `${progress}%` }} />
+      <div className="flex items-center justify-between text-sm font-medium text-[#1d1d1f] dark:text-[#f5f5f7]">
+        <span>Question {step + 1} of {testQuestions.length}</span>
+        <span className="glass-dark rounded-full px-2.5 py-0.5 text-xs">Part {question.part}</span>
       </div>
-      <div className="text-sm font-medium text-indigo-100">Question {step + 1} of {testQuestions.length}</div>
-      <div className="glass rounded-2xl border border-white/40 p-6 shadow-xl shadow-indigo-900/20">
-        <p className="text-xl font-semibold text-slate-800">{question.question}</p>
-        <button onClick={() => speak(question.question)} className="mt-3 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-200">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+        <div className="h-full rounded-full bg-[#0071e3] transition-all duration-500" style={{ width: `${progress}%` }} />
+      </div>
+      <div className="glass animate-fadeUp rounded-2xl p-6">
+        <p className="text-2xl font-semibold leading-snug tracking-tight text-[#1d1d1f] dark:text-[#f5f5f7]">{question.question}</p>
+        <button onClick={() => speak(question.question)} className="btn-chip mt-3 rounded-full px-3 py-1.5 text-xs font-medium">
           🔊 Hear question
         </button>
         <div className="mt-5 flex items-center gap-3">
           {!rec.listening ? (
-            <button onClick={rec.start} className="rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-500 px-5 py-2.5 font-semibold text-white shadow-lg transition hover:brightness-110">🎙️ Answer</button>
+            <button onClick={rec.start} className="btn-primary rounded-full px-6 py-2.5 font-medium">🎙️ Answer</button>
           ) : (
-            <button onClick={submit} className="animate-pulseRing rounded-xl bg-gradient-to-br from-rose-500 to-red-600 px-5 py-2.5 font-semibold text-white shadow-lg">⏹ Stop</button>
+            <button onClick={submit} className="animate-pulseRing flex items-center gap-2 rounded-full bg-[#ff3b30] px-6 py-2.5 font-medium text-white shadow-sm"><span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" /> Stop</button>
           )}
-          {loading && <span className="text-sm font-medium text-indigo-600">Scoring…</span>}
+          {loading && (
+            <span className="flex items-center gap-2 text-sm font-medium text-[#0071e3] dark:text-[#2997ff]">
+              <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#0071e3]/30 border-t-[#0071e3] dark:border-[#2997ff]/30 dark:border-t-[#2997ff]" />
+              Scoring…
+            </span>
+          )}
         </div>
-        {rec.error && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">{rec.error}</p>}
+        {rec.error && <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">{rec.error}</p>}
       </div>
     </div>
   );

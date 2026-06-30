@@ -22,12 +22,12 @@ export function VoiceSelector() {
   }
 
   return (
-    <label className="flex items-center gap-2 text-xs text-indigo-100">
+    <label className="flex items-center gap-2 text-xs text-[#1d1d1f] dark:text-[#f5f5f7]">
       <span>🔊 Voice</span>
       <select
         value={selected}
         onChange={(e) => onChange(e.target.value)}
-        className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-indigo-50 outline-none backdrop-blur transition hover:bg-white/20 focus:border-white/40"
+        className="rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[#1d1d1f] outline-none backdrop-blur transition hover:bg-white focus:border-black/20 dark:border-white/15 dark:bg-white/10 dark:text-[#f5f5f7] dark:hover:bg-white/20 dark:focus:border-white/30"
       >
         <option value="" className="text-slate-900">
           Auto (recommended)
