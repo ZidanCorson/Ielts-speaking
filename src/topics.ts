@@ -422,4 +422,206 @@ export const topics: Topic[] = [
       "How has family life changed?",
     ],
   },
+
+  // ---------- PART 1 (season extras) ----------
+  {
+    id: "p1-clothes",
+    season: "2026 May–Aug",
+    title: "Clothes & Fashion",
+    part: 1,
+    questions: [
+      "What kind of clothes do you usually wear?",
+      "Do you prefer comfortable or fashionable clothes?",
+      "Has your style changed over the years?",
+      "Do you buy clothes online or in shops?",
+    ],
+  },
+  {
+    id: "p1-reading",
+    season: "2026 May–Aug",
+    title: "Reading",
+    part: 1,
+    questions: [
+      "Do you enjoy reading?",
+      "What kind of books do you like?",
+      "Do you prefer paper books or e-books?",
+      "Did you read a lot as a child?",
+    ],
+  },
+  {
+    id: "p1-transport",
+    season: "2026 May–Aug",
+    title: "Transport & Travel to Work",
+    part: 1,
+    questions: [
+      "How do you usually get around?",
+      "Do you prefer public transport or driving?",
+      "How long is your daily commute?",
+      "Has transport in your area improved?",
+    ],
+  },
+  {
+    id: "p1-festivals",
+    season: "2026 May–Aug",
+    title: "Festivals & Celebrations",
+    part: 1,
+    questions: [
+      "What festivals are important in your country?",
+      "How do you usually celebrate them?",
+      "What is your favourite celebration?",
+      "Do you prefer celebrating with family or friends?",
+    ],
+  },
+  {
+    id: "p1-nature",
+    season: "2026 May–Aug",
+    title: "Nature & the Outdoors",
+    part: 1,
+    questions: [
+      "Do you like spending time in nature?",
+      "Is there much green space where you live?",
+      "What outdoor activities do you enjoy?",
+      "Did you spend more time outdoors as a child?",
+    ],
+  },
+  {
+    id: "p1-news",
+    season: "2026 May–Aug",
+    title: "News & Current Events",
+    part: 1,
+    questions: [
+      "How do you usually get the news?",
+      "Do you follow the news every day?",
+      "What kind of news interests you most?",
+      "Do you prefer local or international news?",
+    ],
+  },
+
+  // ---------- PART 2 (season extras) ----------
+  {
+    id: "p2-advice",
+    season: "2026 May–Aug",
+    title: "A piece of useful advice",
+    part: 2,
+    questions: [
+      "Describe a piece of useful advice you received. You should say: what it was, who gave it to you, when you received it, and how it helped you.",
+      "Do you often ask others for advice?",
+      "Is it better to get advice from family or friends?",
+    ],
+  },
+  {
+    id: "p2-tried-new",
+    season: "2026 May–Aug",
+    title: "Something new you tried",
+    part: 2,
+    questions: [
+      "Describe something new you tried recently. You should say: what it was, why you tried it, how it went, and how you felt about it.",
+      "Do you like trying new things?",
+      "Why are some people afraid of new experiences?",
+    ],
+  },
+  {
+    id: "p2-public-place",
+    season: "2026 May–Aug",
+    title: "A public place you like",
+    part: 2,
+    questions: [
+      "Describe a public place you enjoy visiting. You should say: where it is, how often you go, what you do there, and why you like it.",
+      "Are there enough public spaces in your city?",
+      "Who should pay to maintain public places?",
+    ],
+  },
+  {
+    id: "p2-conversation",
+    season: "2026 May–Aug",
+    title: "An interesting conversation",
+    part: 2,
+    questions: [
+      "Describe an interesting conversation you had. You should say: who you talked with, where it happened, what it was about, and why it was interesting.",
+      "Do you enjoy talking with strangers?",
+      "Are conversation skills important today?",
+    ],
+  },
+  {
+    id: "p2-photograph",
+    season: "2026 May–Aug",
+    title: "A photograph you like",
+    part: 2,
+    questions: [
+      "Describe a photograph you like. You should say: what is in it, when it was taken, who took it, and why you like it.",
+      "Do you take many photos?",
+      "Are printed photos still important?",
+    ],
+  },
+
+  // ---------- PART 3 (season extras) ----------
+  {
+    id: "p3-cities",
+    season: "2026 May–Aug",
+    title: "Cities & urban life",
+    part: 3,
+    questions: [
+      "Why are more people moving to cities?",
+      "What makes a city a good place to live?",
+      "How can cities deal with overcrowding?",
+      "Will rural areas disappear in the future?",
+    ],
+  },
+  {
+    id: "p3-media-news",
+    season: "2026 May–Aug",
+    title: "Media & news",
+    part: 3,
+    questions: [
+      "Can we trust the news we read online?",
+      "How has social media changed the news?",
+      "Should the news be regulated?",
+      "Do people pay enough attention to important news?",
+    ],
+  },
+  {
+    id: "p3-language",
+    season: "2026 May–Aug",
+    title: "Language & communication",
+    part: 3,
+    questions: [
+      "Why do people learn foreign languages?",
+      "Will English remain the global language?",
+      "Should children learn a second language early?",
+      "How has technology changed the way we communicate?",
+    ],
+  },
+  {
+    id: "p3-science",
+    season: "2026 May–Aug",
+    title: "Science & innovation",
+    part: 3,
+    questions: [
+      "How has science improved daily life?",
+      "Should governments spend more on research?",
+      "Are people too dependent on technology?",
+      "What scientific advances do you expect in the future?",
+    ],
+  },
+  {
+    id: "p3-leisure",
+    season: "2026 May–Aug",
+    title: "Leisure & free time",
+    part: 3,
+    questions: [
+      "Do people have enough free time these days?",
+      "How do people in your country spend their leisure time?",
+      "Is it important to have hobbies?",
+      "Has the way people relax changed over time?",
+    ],
+  },
 ];
+
+// Deterministic "topic of the day": rotates through the bank by calendar date,
+// so the daily challenge is stable for a given day and changes each day.
+export function getDailyTopic(date = new Date()): Topic {
+  const dayNumber = Math.floor(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000
+  );
+  return topics[((dayNumber % topics.length) + topics.length) % topics.length];
+}

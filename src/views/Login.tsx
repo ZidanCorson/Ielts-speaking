@@ -2,9 +2,22 @@ import { useState } from "react";
 import { login, register } from "../services/api";
 import { useAuth } from "../auth/AuthContext";
 
-export function Login() {
+type AuthMode = "login" | "register";
+
+export function Login({
+  mode: modeProp,
+  onModeChange,
+}: {
+  mode?: AuthMode;
+  onModeChange?: (m: AuthMode) => void;
+} = {}) {
   const { signIn } = useAuth();
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [internalMode, setInternalMode] = useState<AuthMode>("login");
+  const mode = modeProp ?? internalMode;
+  const setMode = (m: AuthMode) => {
+    if (onModeChange) onModeChange(m);
+    else setInternalMode(m);
+  };
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,8 +34,8 @@ export function Login() {
           ? await login(email, password)
           : await register(name, email, password);
       signIn(res.student, res.token);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setBusy(false);
     }
@@ -66,7 +79,7 @@ export function Login() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Full name"
                 required
-                className="w-full rounded-xl border border-black/10 bg-white py-2.5 pl-10 pr-4 text-sm text-[#1d1d1f] outline-none transition focus:border-[#0071e3] dark:border-white/15 dark:bg-white/5 dark:text-[#f5f5f7] dark:focus:border-[#2997ff]"
+                className="w-full rounded-xl border border-black/10 bg-white py-2.5 pl-10 pr-4 text-sm text-[#1d1d1f] outline-none transition focus:border-[#ef5f3c] dark:border-white/15 dark:bg-white/5 dark:text-[#f5f5f7] dark:focus:border-[#ff7a52]"
               />
             </div>
           )}
@@ -78,7 +91,7 @@ export function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
-              className="w-full rounded-xl border border-black/10 bg-white py-2.5 pl-10 pr-4 text-sm text-[#1d1d1f] outline-none transition focus:border-[#0071e3] dark:border-white/15 dark:bg-white/5 dark:text-[#f5f5f7] dark:focus:border-[#2997ff]"
+              className="w-full rounded-xl border border-black/10 bg-white py-2.5 pl-10 pr-4 text-sm text-[#1d1d1f] outline-none transition focus:border-[#ef5f3c] dark:border-white/15 dark:bg-white/5 dark:text-[#f5f5f7] dark:focus:border-[#ff7a52]"
             />
           </div>
           <div className="relative">
@@ -89,7 +102,7 @@ export function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               required
-              className="w-full rounded-xl border border-black/10 bg-white py-2.5 pl-10 pr-4 text-sm text-[#1d1d1f] outline-none transition focus:border-[#0071e3] dark:border-white/15 dark:bg-white/5 dark:text-[#f5f5f7] dark:focus:border-[#2997ff]"
+              className="w-full rounded-xl border border-black/10 bg-white py-2.5 pl-10 pr-4 text-sm text-[#1d1d1f] outline-none transition focus:border-[#ef5f3c] dark:border-white/15 dark:bg-white/5 dark:text-[#f5f5f7] dark:focus:border-[#ff7a52]"
             />
           </div>
           {error && <p className="rounded-lg bg-rose-50 px-3 py-2 text-xs text-rose-700 dark:bg-rose-500/10 dark:text-rose-300">{error}</p>}
@@ -102,7 +115,7 @@ export function Login() {
         </form>
         <button
           onClick={() => setMode(mode === "login" ? "register" : "login")}
-          className="mt-4 w-full text-center text-sm text-[#0071e3] transition hover:underline dark:text-[#2997ff]"
+          className="mt-4 w-full text-center text-sm text-[#d24b2a] transition hover:underline dark:text-[#ff9e7a]"
         >
           {mode === "login" ? "New here? Create an account" : "Already have an account? Sign in"}
         </button>

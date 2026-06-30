@@ -23,6 +23,7 @@ export interface Feedback {
   strengths: string[];
   improvements: string[];
   enhancedAnswer: string;
+  vocabulary?: { phrase: string; meaning: string }[];
 }
 
 export interface HistoryEntry {

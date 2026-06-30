@@ -70,8 +70,8 @@ export function startRecognition(
 
   try {
     recognition.start();
-  } catch (e: any) {
-    onError?.(e?.message ?? "Could not start microphone.");
+  } catch (e) {
+    onError?.(e instanceof Error ? e.message : "Could not start microphone.");
   }
   return {
     stop: () => {

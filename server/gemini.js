@@ -113,8 +113,8 @@ export async function scoreAnswer(question, transcript, part = 1) {
   const isPart2 = Number(part) === 2;
   const criteria = isPart2 ? part2Criteria(wordCount) : part1Criteria();
   const modelAnswerGuide = isPart2
-    ? "a band-8 model long-turn answer: natural, spoken, well-organised, ~150-200 words covering the cue card with detail and examples"
-    : "a band-8 model answer, natural and spoken, 3-5 sentences";
+    ? "an upgraded band-8 version of the STUDENT'S OWN long-turn answer above: keep their ideas, examples and personal details, but rewrite it with richer vocabulary, more accurate and varied grammar, and smoother organisation; natural and spoken, ~150-200 words covering the cue card"
+    : "an upgraded band-8 version of the STUDENT'S OWN answer above: keep their ideas and personal details, but rewrite it with richer vocabulary, more accurate and varied grammar, and smoother fluency; natural and spoken, 3-5 sentences";
   const prompt = `You are a fair, certified IELTS speaking examiner. Apply the official band
 descriptors accurately — neither inflating nor deflating scores. Reward what the candidate does
 well and only penalise genuine, observable weaknesses. A clear, accurate, relevant answer with
@@ -131,8 +131,13 @@ Reply with ONLY valid JSON:
   "score": { "fluency": 5.5, "lexical": 5.5, "grammar": 5.5, "pronunciation": 5.5, "overall": 5.5 },
   "strengths": ["2-3 specific bullets"],
   "improvements": ["2-3 actionable tips"],
-  "enhancedAnswer": "${modelAnswerGuide}"
-}`;
+  "enhancedAnswer": "${modelAnswerGuide}. Build directly on what the student actually said — do NOT invent a generic answer on a different topic or with unrelated content.",
+  "vocabulary": [
+    {"phrase": "a useful collocation or idiom for this topic", "meaning": "short, plain-English meaning"}
+  ]
+}
+For "vocabulary", give 3-4 band-7+ collocations, idioms or topic phrases relevant to this question
+that the student could realistically reuse; keep each meaning to a short plain-English phrase.`;
   const res = await withRetry((model) => model.generateContent(prompt));
   return extractJson(res.response.text());
 }

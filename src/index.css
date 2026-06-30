@@ -9,13 +9,18 @@ html.dark {
   color-scheme: dark;
 }
 
-/* Apple-inspired: clean, minimal, system (SF Pro) typography. Light + dark themes. */
+/* Warm, friendly editorial look: soft cream surfaces, sunset-coral accents. */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
-  color: #1d1d1f;
-  background: #f5f5f7;
+  color: #2a2320;
+  background: #fbf4ec;
+  background-image:
+    radial-gradient(48rem 48rem at 8% -8%, rgba(255, 138, 76, 0.18), transparent 60%),
+    radial-gradient(44rem 44rem at 102% 0%, rgba(255, 84, 112, 0.14), transparent 58%),
+    radial-gradient(40rem 40rem at 50% 118%, rgba(255, 184, 92, 0.16), transparent 60%);
+  background-attachment: fixed;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -24,41 +29,42 @@ body {
 }
 
 html.dark body {
-  color: #f5f5f7;
-  background: #0b1224;
+  color: #f6efe8;
+  background: #1a1310;
   background-image:
-    radial-gradient(45rem 45rem at 8% -5%, rgba(79, 70, 229, 0.32), transparent 58%),
-    radial-gradient(42rem 42rem at 105% 5%, rgba(14, 165, 233, 0.24), transparent 55%),
-    radial-gradient(40rem 40rem at 50% 115%, rgba(20, 184, 166, 0.18), transparent 55%),
-    linear-gradient(180deg, #0b1224 0%, #0e1730 100%);
+    radial-gradient(45rem 45rem at 8% -5%, rgba(255, 122, 69, 0.30), transparent 58%),
+    radial-gradient(42rem 42rem at 105% 5%, rgba(244, 63, 94, 0.22), transparent 55%),
+    radial-gradient(40rem 40rem at 50% 115%, rgba(245, 158, 11, 0.18), transparent 55%),
+    linear-gradient(180deg, #1a1310 0%, #211712 100%);
   background-attachment: fixed;
 }
 
 /* ---- Reusable surfaces ---- */
-/* Solid cards with a soft, diffuse shadow — Apple's product-card look. */
+/* Solid cards with a soft, warm diffuse shadow. */
 .glass {
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.06);
+  background: #fffdfb;
+  border: 1px solid rgba(255, 138, 76, 0.10);
+  box-shadow: 0 2px 8px rgba(120, 60, 20, 0.05), 0 12px 32px rgba(120, 60, 20, 0.08);
 }
 html.dark .glass {
-  background: rgba(30, 42, 74, 0.92);
+  background: rgba(48, 34, 28, 0.92);
   backdrop-filter: saturate(160%) blur(20px);
   -webkit-backdrop-filter: saturate(160%) blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset,
+  border: 1px solid rgba(255, 200, 160, 0.12);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset,
     0 10px 30px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
-/* Frosted translucent pill/bar — Apple's nav & chip treatment. */
+/* Frosted translucent pill/bar. */
 .glass-dark {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 250, 244, 0.74);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(120, 60, 20, 0.07);
 }
 html.dark .glass-dark {
-  background: rgba(255, 255, 255, 0.10);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 240, 230, 0.08);
+  border: 1px solid rgba(255, 200, 160, 0.14);
 }
 
 /* Gentle lift-on-hover for clickable cards. */
@@ -84,14 +90,17 @@ html.dark .gradient-text {
   color: #f5f5f7;
 }
 
-/* Apple's signature blue pill CTA (works in both themes). */
+/* Warm sunset CTA (works in both themes). */
 .btn-primary {
-  background-color: #0071e3;
+  background-color: #ef5f3c;
+  background-image: linear-gradient(135deg, #ff8a4c 0%, #ef5f3c 55%, #f43f5e 120%);
   color: #fff;
-  transition: background-color 0.2s ease, transform 0.12s ease;
+  box-shadow: 0 6px 16px rgba(239, 95, 60, 0.28);
+  transition: filter 0.2s ease, transform 0.12s ease, box-shadow 0.2s ease;
 }
 .btn-primary:hover {
-  background-color: #0077ed;
+  filter: brightness(1.05);
+  box-shadow: 0 8px 22px rgba(239, 95, 60, 0.36);
 }
 .btn-primary:active {
   transform: scale(0.98);
@@ -120,11 +129,11 @@ html.dark .btn-chip:hover {
 
 /* ---- Focus & selection ---- */
 :where(input, button, select, a):focus-visible {
-  outline: 3px solid rgba(0, 125, 250, 0.6);
+  outline: 3px solid rgba(239, 95, 60, 0.6);
   outline-offset: 2px;
 }
 ::selection {
-  background: rgba(0, 113, 227, 0.22);
+  background: rgba(239, 95, 60, 0.22);
 }
 
 /* ---- Scrollbars ---- */
