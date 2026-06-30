@@ -9,13 +9,13 @@ const part1 = topics.filter((t) => t.part === 1);
 const part2 = topics.filter((t) => t.part === 2);
 const part3 = topics.filter((t) => t.part === 3);
 
-const testQuestions: string[] = [
-  part1[0]?.questions[0],
-  part1[1]?.questions[0],
-  part2[0]?.questions[0],
-  part3[0]?.questions[0],
-  part3[1]?.questions[0],
-].filter(Boolean) as string[];
+const testQuestions: { question: string; part: number }[] = [
+  { question: part1[0]?.questions[0], part: 1 },
+  { question: part1[1]?.questions[0], part: 1 },
+  { question: part2[0]?.questions[0], part: 2 },
+  { question: part3[0]?.questions[0], part: 3 },
+  { question: part3[1]?.questions[0], part: 3 },
+].filter((q) => q.question) as { question: string; part: number }[];
 
 function avg(nums: number[]) {
   return Math.round((nums.reduce((a, b) => a + b, 0) / nums.length) * 2) / 2;
@@ -35,7 +35,7 @@ export function MockTest() {
     if (!blob) return;
     setLoading(true);
     try {
-      const r = await scoreAnswer({ question, topicTitle: "Mock Test", mode: "mock", audio: blob });
+      const r = await scoreAnswer({ question: question.question, topicTitle: "Mock Test", mode: "mock", part: question.part, audio: blob });
       const next = [...scores, r.feedback.score];
       setScores(next);
       if (step + 1 >= testQuestions.length) setDone(true);
@@ -83,8 +83,8 @@ export function MockTest() {
       </div>
       <div className="text-sm font-medium text-indigo-100">Question {step + 1} of {testQuestions.length}</div>
       <div className="glass rounded-2xl border border-white/40 p-6 shadow-xl shadow-indigo-900/20">
-        <p className="text-xl font-semibold text-slate-800">{question}</p>
-        <button onClick={() => speak(question)} className="mt-3 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-200">
+        <p className="text-xl font-semibold text-slate-800">{question.question}</p>
+        <button onClick={() => speak(question.question)} className="mt-3 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-200">
           🔊 Hear question
         </button>
         <div className="mt-5 flex items-center gap-3">

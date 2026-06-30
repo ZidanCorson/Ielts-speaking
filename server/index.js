@@ -53,12 +53,12 @@ app.post("/api/login", async (req, res) => {
 // ---- Transcribe + score + save ----
 app.post("/api/score", auth, upload.single("audio"), async (req, res) => {
   try {
-    const { question, topicTitle, mode = "practice" } = req.body;
+    const { question, topicTitle, mode = "practice", part = 1 } = req.body;
     let transcript = req.body.transcript || "";
     if (req.file) transcript = await transcribeAudio(req.file.buffer, req.file.mimetype);
     if (!transcript) return res.status(400).json({ error: "No speech detected" });
 
-    const feedback = await scoreAnswer(question, transcript);
+    const feedback = await scoreAnswer(question, transcript, Number(part) || 1);
     const s = feedback.score;
     await query(
       `INSERT INTO sessions (student_id, mode, topic_title, question, transcript,

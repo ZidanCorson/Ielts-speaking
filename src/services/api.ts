@@ -58,6 +58,7 @@ export async function scoreAnswer(args: {
   question: string;
   topicTitle: string;
   mode: string;
+  part?: number;
   audio?: Blob;
   transcript?: string;
 }): Promise<{ transcript: string; feedback: Feedback }> {
@@ -65,6 +66,7 @@ export async function scoreAnswer(args: {
   fd.append("question", args.question);
   fd.append("topicTitle", args.topicTitle);
   fd.append("mode", args.mode);
+  if (args.part) fd.append("part", String(args.part));
   if (args.audio) fd.append("audio", args.audio, "answer.webm");
   if (args.transcript) fd.append("transcript", args.transcript);
 

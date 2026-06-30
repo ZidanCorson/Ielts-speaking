@@ -71,6 +71,7 @@ export function Practice() {
         question: topic.questions[qIndex],
         topicTitle: topic.title,
         mode: "practice",
+        part: topic.part,
         audio: blob,
       });
       setTranscript(r.transcript);
