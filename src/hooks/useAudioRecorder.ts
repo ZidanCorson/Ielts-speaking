@@ -93,7 +93,12 @@ export function useAudioRecorder() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const picked = pickMimeType();
       mimeRef.current = picked;
-      const mr = picked.mimeType
+      // iOS Safari throws "The string did not match the expected pattern" when a
+      // mimeType is passed to the constructor, even for types isTypeSupported()
+      // returns true for. On iOS, create without a mimeType and let WebKit pick
+      // its native default (audio/mp4).
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const mr = (!isIOS && picked.mimeType)
         ? new MediaRecorder(stream, { mimeType: picked.mimeType })
         : new MediaRecorder(stream);
       mr.ondataavailable = (e) => e.data.size && chunksRef.current.push(e.data);
@@ -136,7 +141,15 @@ export function useAudioRecorder() {
     return new Promise((resolve) => {
       if (!recRef.current) return resolve(null);
       resolveRef.current = resolve;
-      recRef.current.stop();
+      try {
+        recRef.current.stop();
+      } catch {
+        // MediaRecorder.stop() can throw on some iOS versions; surface as null
+        // so the caller shows "No audio captured" rather than a cryptic DOM error.
+        resolveRef.current = null;
+        resolve(null);
+        return;
+      }
       setListening(false);
       if (timerRef.current) window.clearInterval(timerRef.current);
     });
