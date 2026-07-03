@@ -176,13 +176,20 @@ function getActiveVoice(): SpeechSynthesisVoice | null {
 }
 
 export function speak(text: string): void {
-  if (!("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.voice = getActiveVoice();
-  u.rate = 0.98;
-  u.pitch = 1.05;
-  window.speechSynthesis.speak(u);
+  // TTS is a nice-to-have; never let it throw (iOS Safari can raise
+  // "The string did not match the expected pattern") and break the caller.
+  try {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    const voice = getActiveVoice();
+    if (voice) u.voice = voice;
+    u.rate = 0.98;
+    u.pitch = 1.05;
+    window.speechSynthesis.speak(u);
+  } catch {
+    /* speech synthesis unavailable / failed — ignore */
+  }
 }
 
 // Prefer high-quality / neural voices that sound closer to human; fall back to any English voice.

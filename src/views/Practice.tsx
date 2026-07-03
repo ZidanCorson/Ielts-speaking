@@ -136,7 +136,11 @@ export function Practice() {
       return;
     }
     // Keep the clip so the student can listen back to their own answer.
-    setAudioUrl(URL.createObjectURL(take.blob));
+    try {
+      setAudioUrl(URL.createObjectURL(take.blob));
+    } catch {
+      /* replay clip is optional — ignore if the browser rejects the blob */
+    }
     setLoading(true);
     setError("");
     setPaywall("");
