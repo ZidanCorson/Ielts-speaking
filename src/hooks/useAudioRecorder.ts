@@ -19,6 +19,34 @@ function pickMimeType(): { mimeType: string; ext: string } {
   return { mimeType: "", ext: "webm" }; // let the browser choose its default
 }
 
+// Construct a MediaRecorder that actually works on this browser. iOS Safari
+// throws "The string did not match the expected pattern" (a SyntaxError) from
+// the constructor for mimeTypes that isTypeSupported() wrongly reports as OK,
+// so we try the chosen type first and progressively fall back to the browser
+// default. Returns the recorder plus the file extension that matches it.
+function createRecorder(
+  stream: MediaStream,
+  picked: { mimeType: string; ext: string }
+): { recorder: MediaRecorder; ext: string } {
+  const attempts: { mimeType?: string; ext: string }[] = [];
+  if (picked.mimeType) attempts.push({ mimeType: picked.mimeType, ext: picked.ext });
+  // iOS records to mp4; make it the next preference before the bare default.
+  attempts.push({ mimeType: "audio/mp4", ext: "mp4" });
+  attempts.push({ ext: picked.ext }); // no mimeType — let the browser decide
+  for (const a of attempts) {
+    try {
+      const recorder = a.mimeType
+        ? new MediaRecorder(stream, { mimeType: a.mimeType })
+        : new MediaRecorder(stream);
+      return { recorder, ext: a.ext };
+    } catch {
+      /* try the next fallback */
+    }
+  }
+  // Last resort: bare constructor (may still throw, caught by caller).
+  return { recorder: new MediaRecorder(stream), ext: picked.ext };
+}
+
 // Reject clips that are almost certainly unusable (mic muted / tapped by accident).
 const MIN_SECONDS = 2;
 
@@ -92,15 +120,10 @@ export function useAudioRecorder() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const picked = pickMimeType();
-      mimeRef.current = picked;
-      // iOS Safari throws "The string did not match the expected pattern" when a
-      // mimeType is passed to the constructor, even for types isTypeSupported()
-      // returns true for. On iOS, create without a mimeType and let WebKit pick
-      // its native default (audio/mp4).
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      const mr = (!isIOS && picked.mimeType)
-        ? new MediaRecorder(stream, { mimeType: picked.mimeType })
-        : new MediaRecorder(stream);
+      // Build a recorder that works on this browser, with iOS-safe fallbacks.
+      // The returned ext reflects whatever mimeType actually succeeded.
+      const { recorder: mr, ext } = createRecorder(stream, picked);
+      mimeRef.current = { mimeType: mr.mimeType || picked.mimeType, ext };
       mr.ondataavailable = (e) => e.data.size && chunksRef.current.push(e.data);
       mr.onstop = () => {
         stream.getTracks().forEach((t) => t.stop());
@@ -111,7 +134,7 @@ export function useAudioRecorder() {
           : null;
         resolveRef.current?.(
           blob
-            ? { blob, mimeType: type, ext: picked.ext, seconds: secondsRef.current }
+            ? { blob, mimeType: type, ext, seconds: secondsRef.current }
             : null
         );
       };
@@ -119,7 +142,12 @@ export function useAudioRecorder() {
       // iOS Safari fires ondataavailable AFTER onstop when no timeslice is used,
       // so chunks are empty when onstop assembles the blob. Using a timeslice
       // forces incremental delivery and guarantees data is ready at stop.
-      mr.start(250);
+      // Some iOS versions reject the timeslice arg, so fall back to a bare start.
+      try {
+        mr.start(250);
+      } catch {
+        mr.start();
+      }
       startMeter(stream);
       setListening(true);
       setSeconds(0);
