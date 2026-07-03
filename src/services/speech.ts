@@ -131,16 +131,22 @@ const BLOCKED_VOICE_NAMES = new Set([
 function isProfessionalVoice(v: SpeechSynthesisVoice): boolean {
   const name = v.name.trim();
   if (BLOCKED_VOICE_NAMES.has(name)) return false;
-  // Drop robotic novelty voices (the eloquence/"com.apple.eloquence" family) and
-  // low-quality "compact" variants that sound mechanical.
+  // Drop robotic novelty voices (the eloquence/"com.apple.eloquence" family).
   if (/eloquence/i.test((v as any).voiceURI ?? "")) return false;
-  if (/\b(compact|novelty)\b/i.test(name)) return false;
+  // On macOS desktop, filter low-quality compact variants; on iOS/Android the
+  // compact voices are the only ones available, so keep them there.
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (!isMobile && /\b(compact|novelty)\b/i.test(name)) return false;
   return true;
 }
 
 // English voices the user can choose from (professional, non-novelty only).
+// Falls back to all English voices if the professional filter leaves nothing
+// (e.g. some Android WebViews with only generic voices).
 export function getEnglishVoices(): SpeechSynthesisVoice[] {
-  return voices.filter((v) => v.lang.startsWith("en") && isProfessionalVoice(v));
+  const english = voices.filter((v) => v.lang.startsWith("en"));
+  const professional = english.filter(isProfessionalVoice);
+  return professional.length > 0 ? professional : english;
 }
 
 // Subscribe to voice-list changes (voices load asynchronously in some browsers).

@@ -111,7 +111,10 @@ export function useAudioRecorder() {
         );
       };
       recRef.current = mr;
-      mr.start();
+      // iOS Safari fires ondataavailable AFTER onstop when no timeslice is used,
+      // so chunks are empty when onstop assembles the blob. Using a timeslice
+      // forces incremental delivery and guarantees data is ready at stop.
+      mr.start(250);
       startMeter(stream);
       setListening(true);
       setSeconds(0);
@@ -120,8 +123,12 @@ export function useAudioRecorder() {
         secondsRef.current += 1;
         setSeconds(secondsRef.current);
       }, 1000);
-    } catch {
-      setError("Microphone access denied. Allow mic permission and try again.");
+    } catch (e) {
+      if (typeof MediaRecorder === "undefined") {
+        setError("Your browser doesn't support audio recording. Try Chrome or Safari 14.3+.");
+      } else {
+        setError("Microphone access denied. Allow mic permission and try again.");
+      }
     }
   }
 
